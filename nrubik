@@ -269,7 +269,7 @@ class Cube:
     def scramble(self):
         functions = [self.turn_top, self.turn_bottom, self.turn_left,
                      self.turn_right, self.turn_front, self.turn_back]
-        for i in range(0, 20):
+        for i in range(0, 30):
             functions[random.randint(0, 5)]()
 
     def get_input(self):
