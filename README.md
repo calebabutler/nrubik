@@ -9,6 +9,10 @@ Something like this:
 
 ![Screenshot](/nrubik.png?raw=true)
 
+Here is it solved (Yes, it's possible):
+
+![Screenshot](/nrubik-solved.png?raw=true)
+
 # How do I install it?
 
 Simply download the single, small "nrubik" python script and run it with a curses supported python2 or python3 interpreter. (Yes, the script works with both python2 and python3 :)
