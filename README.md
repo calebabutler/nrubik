@@ -7,11 +7,11 @@ NRubik was made due to the severe lack of n-curses Rubik's cube emulators. This 
 
 Something like this:
 
-![Screenshot](/nrubik.png?raw=true)
+![Screenshot](/nrubik-screenshot.png?raw=true)
 
 Here is it solved (Yes, it's possible):
 
-![Screenshot](/nrubik-solved.png?raw=true)
+![Screenshot](/nrubik-screenshot-solved.png?raw=true)
 
 # How do I install it?
 
