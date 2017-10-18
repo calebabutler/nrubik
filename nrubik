@@ -1,0 +1,312 @@
+#!/usr/bin/env python
+##
+# Copyright (c) 2017 Caleb Butler
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import random
+import curses
+import copy
+
+class Cube:
+
+    display_help = True
+    looping = True
+
+    solved_cube = [
+        [
+            ['W', 'W', 'W'],
+            ['W', 'W', 'W'],
+            ['W', 'W', 'W'],
+        ],
+        [
+            ['Y', 'Y', 'Y'],
+            ['Y', 'Y', 'Y'],
+            ['Y', 'Y', 'Y'],
+        ],
+        [
+            ['O', 'O', 'O'],
+            ['O', 'O', 'O'],
+            ['O', 'O', 'O'],
+        ],
+        [
+            ['R', 'R', 'R'],
+            ['R', 'R', 'R'],
+            ['R', 'R', 'R'],
+        ],
+        [
+            ['G', 'G', 'G'],
+            ['G', 'G', 'G'],
+            ['G', 'G', 'G'],
+        ],
+        [
+            ['B', 'B', 'B'],
+            ['B', 'B', 'B'],
+            ['B', 'B', 'B'],
+        ],
+    ]
+
+    def __init__(self, stdscr):
+        self.stdscr = stdscr
+        curses.use_default_colors()
+        curses.curs_set(False)
+
+        self.cube = copy.deepcopy(self.solved_cube)
+        self.scramble()
+
+        if curses.has_colors():
+            curses.init_pair(1, curses.COLOR_WHITE, -1)
+            curses.init_pair(2, curses.COLOR_YELLOW, -1)
+            curses.init_pair(3, curses.COLOR_MAGENTA, -1)
+            curses.init_pair(4, curses.COLOR_RED, -1)
+            curses.init_pair(5, curses.COLOR_GREEN, -1)
+            curses.init_pair(6, curses.COLOR_BLUE, -1)
+
+    def helper(self):
+        self.stdscr.addstr(1, 0, "Colors:")
+        if curses.has_colors() == False:
+            self.stdscr.addstr(3, 0, "W - White")
+            self.stdscr.addstr(4, 0, "Y - Yellow")
+            self.stdscr.addstr(5, 0, "O - Orange")
+            self.stdscr.addstr(6, 0, "R - Red")
+            self.stdscr.addstr(7, 0, "G - Green")
+            self.stdscr.addstr(8, 0, "B - Blue")
+        else:
+            self.stdscr.addstr(3, 0, "W - White", curses.color_pair(1))
+            self.stdscr.addstr(4, 0, "Y - Yellow", curses.color_pair(2))
+            self.stdscr.addstr(5, 0, "O - Orange (Magenta)", curses.color_pair(3))
+            self.stdscr.addstr(6, 0, "R - Red", curses.color_pair(4))
+            self.stdscr.addstr(7, 0, "G - Green", curses.color_pair(5))
+            self.stdscr.addstr(8, 0, "B - Blue", curses.color_pair(6))
+
+        self.stdscr.addstr(10, 0, "Keybindings:")
+
+        self.stdscr.addstr(12, 0, "W - Turn top clockwise")
+        self.stdscr.addstr(13, 0, "X - Turn bottom clockwise")
+        self.stdscr.addstr(14, 0, "A - Turn left clockwise")
+        self.stdscr.addstr(15, 0, "D - Turn right clockwise")
+        self.stdscr.addstr(16, 0, "S - Turn front clockwise")
+        self.stdscr.addstr(17, 0, "E - Turn back clockwise")
+
+        self.stdscr.addstr(19, 0, "M - Mix up/Scramble")
+        self.stdscr.addstr(20, 0, "H - Toggle on/off help")
+        self.stdscr.addstr(21, 0, "Q - Quit")
+
+    def solved(self):
+        return self.cube == self.solved_cube
+
+    def print_solve(self):
+        max_y, max_x = self.stdscr.getmaxyx()
+        self.stdscr.addstr(1, int(max_x / 2 - 9), "Solved! Holy S**t!")
+
+    def display_cubie(self, y, x, cubie):
+        colors = {'W': 1, 'Y': 2, 'O': 3, 'R': 4, 'G': 5, 'B': 6}
+        if curses.has_colors() == False:
+            self.stdscr.addstr(int(y), int(x), cubie)
+        else:
+            self.stdscr.addstr(int(y), int(x), cubie, curses.color_pair(colors[cubie]))
+
+    def display_cube(self):
+        max_y, max_x = self.stdscr.getmaxyx()
+        
+        # top
+        for i, line in enumerate(self.cube[0]):
+            for j in range(0, 3):
+                self.display_cubie(max_y / 2 - 5 + i, max_x / 2 - 1 + j, line[j])
+        # bottom
+        for i, line in enumerate(self.cube[1]):
+            for j in range(0, 3):
+                self.display_cubie(max_y / 2 + 3 + i, max_x / 2 - 1 + j, line[j])
+        # left
+        for i, line in enumerate(self.cube[2]):
+            for j in range(0, 3):
+                self.display_cubie(max_y / 2 - 1 + i, max_x / 2 - 5 + j, line[j])
+        # right
+        for i, line in enumerate(self.cube[3]):
+            for j in range(0, 3):
+                self.display_cubie(max_y / 2 - 1 + i, max_x / 2 + 3 + j, line[j])
+        # front
+        for i, line in enumerate(self.cube[4]):
+            for j in range(0, 3):
+                self.display_cubie(max_y / 2 - 1 + i, max_x / 2 - 1 + j, line[j])
+        # back
+        for i, line in enumerate(self.cube[5]):
+            for j in range(0, 3):
+                self.display_cubie(max_y / 2 - 6 + i, max_x / 2 + 4 + j, line[j])
+
+    def turn_top(self):
+        backup_cube = copy.deepcopy(self.cube)
+        # turn top only
+        for i in range(0, 3):
+            self.cube[0][i][0] = backup_cube[0][2][i]
+            self.cube[0][i][1] = backup_cube[0][1][i]
+            self.cube[0][i][2] = backup_cube[0][0][i]
+        # turn rest
+        for i, j in [(2, 4), (3, 5), (4, 3), (5, 2)]:
+            self.cube[i][0][0] = backup_cube[j][0][0]
+            self.cube[i][0][1] = backup_cube[j][0][1]
+            self.cube[i][0][2] = backup_cube[j][0][2]
+
+    def turn_bottom(self):
+        backup_cube = copy.deepcopy(self.cube)
+        # turn bottom only
+        for i in range(0, 3):
+            self.cube[1][i][0] = backup_cube[1][2][i]
+            self.cube[1][i][1] = backup_cube[1][1][i]
+            self.cube[1][i][2] = backup_cube[1][0][i]
+        # turn rest
+        for i, j in [(2, 5), (3, 4), (4, 2), (5, 3)]:
+            self.cube[i][2][0] = backup_cube[j][2][0]
+            self.cube[i][2][1] = backup_cube[j][2][1]
+            self.cube[i][2][2] = backup_cube[j][2][2]
+
+    def turn_left(self):
+        backup_cube = copy.deepcopy(self.cube)
+        # turn left only
+        for i in range(0, 3):
+            self.cube[2][i][0] = backup_cube[2][2][i]
+            self.cube[2][i][1] = backup_cube[2][1][i]
+            self.cube[2][i][2] = backup_cube[2][0][i]
+        # change top-part
+        self.cube[0][0][0] = backup_cube[5][2][2]
+        self.cube[0][1][0] = backup_cube[5][1][2]
+        self.cube[0][2][0] = backup_cube[5][0][2]
+        # change bottom-part
+        self.cube[1][0][0] = backup_cube[4][0][0]
+        self.cube[1][1][0] = backup_cube[4][1][0]
+        self.cube[1][2][0] = backup_cube[4][2][0]
+        # change front-part
+        self.cube[4][0][0] = backup_cube[0][0][0]
+        self.cube[4][1][0] = backup_cube[0][1][0]
+        self.cube[4][2][0] = backup_cube[0][2][0]
+        # change back-part
+        self.cube[5][0][2] = backup_cube[1][2][0]
+        self.cube[5][1][2] = backup_cube[1][1][0]
+        self.cube[5][2][2] = backup_cube[1][0][0]
+
+    def turn_right(self):
+        backup_cube = copy.deepcopy(self.cube)
+        # turn right only
+        for i in range(0, 3):
+            self.cube[3][i][0] = backup_cube[3][2][i]
+            self.cube[3][i][1] = backup_cube[3][1][i]
+            self.cube[3][i][2] = backup_cube[3][0][i]
+        # change top-part
+        self.cube[0][0][2] = backup_cube[4][0][2]
+        self.cube[0][1][2] = backup_cube[4][1][2]
+        self.cube[0][2][2] = backup_cube[4][2][2]
+        # change bottom-part
+        self.cube[1][0][2] = backup_cube[5][2][0]
+        self.cube[1][1][2] = backup_cube[5][1][0]
+        self.cube[1][2][2] = backup_cube[5][0][0]
+        # change front-part
+        self.cube[4][0][2] = backup_cube[1][0][2]
+        self.cube[4][1][2] = backup_cube[1][1][2]
+        self.cube[4][2][2] = backup_cube[1][2][2]
+        # change back-part
+        self.cube[5][0][0] = backup_cube[0][2][2]
+        self.cube[5][1][0] = backup_cube[0][1][2]
+        self.cube[5][2][0] = backup_cube[0][0][2]
+
+    def turn_front(self):
+        backup_cube = copy.deepcopy(self.cube)
+        # turn front only
+        for i in range(0, 3):
+            self.cube[4][i][0] = backup_cube[4][2][i]
+            self.cube[4][i][1] = backup_cube[4][1][i]
+            self.cube[4][i][2] = backup_cube[4][0][i]
+        # change top-part
+        self.cube[0][2][0] = backup_cube[2][2][2]
+        self.cube[0][2][1] = backup_cube[2][1][2]
+        self.cube[0][2][2] = backup_cube[2][0][2]
+        # change bottom-part
+        self.cube[1][0][0] = backup_cube[3][2][0]
+        self.cube[1][0][1] = backup_cube[3][1][0]
+        self.cube[1][0][2] = backup_cube[3][0][0]
+        # change left-part
+        self.cube[2][0][2] = backup_cube[1][0][0]
+        self.cube[2][1][2] = backup_cube[1][0][1]
+        self.cube[2][2][2] = backup_cube[1][0][2]
+        # change right-part
+        self.cube[3][0][0] = backup_cube[0][2][0]
+        self.cube[3][1][0] = backup_cube[0][2][1]
+        self.cube[3][2][0] = backup_cube[0][2][2]
+
+    def turn_back(self):
+        backup_cube = copy.deepcopy(self.cube)
+        # turn back only
+        for i in range(0, 3):
+            self.cube[5][i][0] = backup_cube[5][2][i]
+            self.cube[5][i][1] = backup_cube[5][1][i]
+            self.cube[5][i][2] = backup_cube[5][0][i]
+        # change top-part
+        self.cube[0][0][0] = backup_cube[3][0][2]
+        self.cube[0][0][1] = backup_cube[3][1][2]
+        self.cube[0][0][2] = backup_cube[3][2][2]
+        # change bottom-part
+        self.cube[1][2][0] = backup_cube[2][0][0]
+        self.cube[1][2][1] = backup_cube[2][1][0]
+        self.cube[1][2][2] = backup_cube[2][2][0]
+        # change left-part
+        self.cube[2][0][0] = backup_cube[0][0][2]
+        self.cube[2][1][0] = backup_cube[0][0][1]
+        self.cube[2][2][0] = backup_cube[0][0][0]
+        # change right-part
+        self.cube[3][0][2] = backup_cube[1][2][2]
+        self.cube[3][1][2] = backup_cube[1][2][1]
+        self.cube[3][2][2] = backup_cube[1][2][0]
+
+    def scramble(self):
+        functions = [self.turn_top, self.turn_bottom, self.turn_left,
+                     self.turn_right, self.turn_front, self.turn_back]
+        for i in range(0, 20):
+            functions[random.randint(0, 5)]()
+
+    def get_input(self):
+        key = self.stdscr.getkey()
+        if key == 'q':
+            self.looping = False
+        elif key == 'h':
+            self.display_help = not self.display_help
+        elif key == 'w':
+            self.turn_top()
+        elif key == 'x':
+            self.turn_bottom()
+        elif key == 'a':
+            self.turn_left()
+        elif key == 'd':
+            self.turn_right()
+        elif key == 's':
+            self.turn_front()
+        elif key == 'e':
+            self.turn_back()
+        elif key == 'm':
+            self.scramble()
+
+    def loop(self):
+        while self.looping:
+            self.stdscr.erase()
+            if self.display_help is True:
+                self.helper()
+            if self.solved() is True:
+                self.print_solve()
+            self.display_cube()
+            self.stdscr.refresh()
+            self.get_input()
+
+def main(stdscr):
+    cube = Cube(stdscr)
+    cube.loop()
+
+if __name__ == '__main__':
+    curses.wrapper(main)
