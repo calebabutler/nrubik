@@ -13,4 +13,6 @@ What, you mean with a distribution's package manager? See here later for updates
 
 # What does it look like?
 
-See here later for screenshots.
+Something like this:
+
+![Screenshot](/nrubik.png?raw=true)
