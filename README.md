@@ -17,6 +17,16 @@ Here is it solved (Yes, it's possible):
 
 Simply download the single, small "nrubik" python script and run it with a curses supported python2 or python3 interpreter. (Yes, the script works with both python2 and python3 :)
 
+If you want a list of commands (macOS, BSD or Linux only):
+
+    git clone https://github.com/cheertarts/nrubik.git
+    cd nrubik
+    chmod +x nrubik
+    # To install globally
+    cp nrubik /usr/bin/
+    # To install locally (this might not work depending on the machine)
+    cp nrubik $HOME/.local/bin/
+
 # No. How do I _install_ it?
 
 What, you mean with a package manager? See here later for updates.
