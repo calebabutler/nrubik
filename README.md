@@ -1,5 +1,5 @@
 # nrubik
-An N-Curses based, Virtual Rubik's Cube
+An N-Curses Based, Virtual Rubik's Cube
 
 NRubik was made due to the severe lack of n-curses based virtual Rubik's cubes. This very possibly might be the first one. 
 
