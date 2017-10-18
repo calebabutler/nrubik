@@ -1,7 +1,7 @@
 # nrubik
-An N-Curses Rubik's Cube Emulator
+An N-Curses based, Virtual Rubik's Cube
 
-NRubik was made due to the severe lack of n-curses Rubik's cube emulators. This very possibly might be the first one. 
+NRubik was made due to the severe lack of n-curses based virtual Rubik's cubes. This very possibly might be the first one. 
 
 # What does it look like?
 
@@ -37,4 +37,4 @@ On 8 color terminals, there is no orange but there is magenta. If you're confuse
 
 # There are so many features missing. Why?
 
-I purposely left out some features so that any terminal geek can try out this rubik's cube simulator without having to learn how to rotate the cube or turn counter clockwise or do half turns. Don't get me wrong, this is a complete Rubik's Cube simulation, but avid Rubik's Cube solvers might be frustrated that this Rubik's Cube cannot be as easily turned and twisted. Another advantage of simplifying the interface, however, is that avid Rubik's Cube solvers now have a new challenge, and are forced to think of the Rubik's Cube in a different way. If I see that there are people who want a more complex N-Curses rubik's cube simulator, then I will create it under the name of "nrubik-pro," or something similar.
+I purposely left out some features so that any terminal geek can try out this virtual rubik's cube without having to learn how to rotate the cube or turn a side counter clockwise or do half turns. Don't get me wrong, this is a complete virtual Rubik's Cube, but avid Rubik's Cube solvers might be frustrated that this Rubik's Cube cannot be as easily turned and twisted. Another advantage of simplifying the interface, however, is that avid Rubik's Cube solvers now have a new challenge, and are forced to think of the Rubik's Cube in a different way.
