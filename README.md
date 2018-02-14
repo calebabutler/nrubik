@@ -19,13 +19,13 @@ Simply download the single, small "nrubik" python script and run it with a curse
 
 If you want a list of commands (macOS, BSD or Linux only):
 
-    git clone https://github.com/cheertarts/nrubik.git
+    git clone https://github.com/calebabutler/nrubik.git
     cd nrubik
     chmod +x nrubik
     # To install globally
     cp nrubik /usr/bin/
     # To install locally (this might not work depending on the machine)
-    cp nrubik $HOME/.local/bin/
+    cp nrubik $HOME/bin/
 
 # No. How do I _install_ it?
 
@@ -35,6 +35,9 @@ What, you mean with a package manager? See here later for updates.
 
 On 8 color terminals, there is no orange but there is magenta. If you're confused why it's labeled orange in the first place, on an ordinary Rubik's Cube that is where orange would be.
 
-# There are so many features missing. Why?
+# How is it best played?
 
-I purposely left out some features so that any terminal geek can try out this virtual rubik's cube without having to learn how to rotate the cube or turn a side counter clockwise or do half turns. Don't get me wrong, this is a complete virtual Rubik's Cube, but avid Rubik's Cube solvers might be frustrated that this Rubik's Cube cannot be as easily turned and twisted. Another advantage of simplifying the interface, however, is that avid Rubik's Cube solvers now have a new challenge, and are forced to think of the Rubik's Cube in a different way.
+Use a new terminal window/profile with a big font size (e.g. Monospace 20).
+
+Coordinates and buffer sizes are for a 80x24 screen.
+
