@@ -19,7 +19,7 @@ Simply download the single, small "nrubik" python script and run it with a curse
 
 If you want a list of commands (macOS, BSD or Linux only):
 
-    git clone https://github.com/calebabutler/nrubik.git
+    git clone https://github.com/linuxcowboy/nrubik.git
     cd nrubik
     chmod +x nrubik
     # To install globally
