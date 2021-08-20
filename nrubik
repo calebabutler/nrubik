@@ -106,7 +106,7 @@ class Cube:
 
     def print_solve(self):
         max_y, max_x = self.stdscr.getmaxyx()
-        self.stdscr.addstr(1, int(max_x / 2 - 9), "Solved! Holy S**t!")
+        self.stdscr.addstr(1, int(max_x / 2 - 9), "Solved!")
 
     def display_cubie(self, y, x, cubie):
         colors = {'W': 1, 'Y': 2, 'O': 3, 'R': 4, 'G': 5, 'B': 6}
